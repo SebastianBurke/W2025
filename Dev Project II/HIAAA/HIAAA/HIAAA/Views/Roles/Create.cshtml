@@ -1,0 +1,32 @@
+@model HIAAA.DTO.RoleDTO
+@{
+    ViewData["title"] = "Create App Role";
+}
+
+<form asp-action="Create" class="mt-5 grid gap-6" asp-controller="Roles">
+    <input type="hidden" class="hidden" asp-for="AppId" value="@Model.AppId">
+    <input type="hidden" class="hidden" asp-for="App.AppId">
+    <input type="hidden" class="hidden" asp-for="App.AppCode">
+    <input type="hidden" class="hidden" asp-for="App.AppName">
+    <input type="hidden" class="hidden" asp-for="App.CreatedBy">
+    <div class="flex flex-col w-full">
+        <label asp-for="Rolecode">Role Code</label>
+        <input class="w-full input input-bordered" type="text" asp-for="Rolecode">
+    </div>
+
+    <div class="flex flex-col w-full">
+        <label asp-for="Rolename">Role Name</label>
+        <input class="input input-bordered w-full" type="text" asp-for="Rolename">
+    </div>
+
+    <div class="flex flex-col w-full">
+        <label asp-for="Roledescription">Role Description</label>
+        <input class="input input-bordered w-full" asp-for="Roledescription">
+        <span asp-validation-for="Roledescription"></span>
+    </div>
+
+    <div class="flex flex-row gap-3">
+        <button type="submit" class="btn btn-primary mt-4">Create</button>
+        <a asp-action="Index" class="btn btn-neutral mt-4">Cancel</a>
+    </div>
+</form>

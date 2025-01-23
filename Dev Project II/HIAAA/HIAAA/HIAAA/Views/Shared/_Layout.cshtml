@@ -1,0 +1,134 @@
+﻿@using HIAAA.Areas.Identity.Data
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@inject SignInManager<HIAAAUser> SignInManager
+@inject UserManager<HIAAAUser> UserManager
+
+@{
+    var breadcrumbs = new List<(string label, string link)>();
+    ViewData["Breadcrumbs"] = "";
+    ViewData["PageHeader"] = "";
+    // TODO: Change this to be less buggy for the ADMIN
+    if (SignInManager.IsSignedIn(User) && (User.IsInRole("APPADMIN") || User.IsInRole("ADMIN")))
+    {
+        breadcrumbs = ViewContext.GetBreadcrumbs();
+        ViewData["Breadcrumbs"] = breadcrumbs;
+        ViewData["PageHeader"] = breadcrumbs.Last().label;
+    }
+}
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>@ViewData["Title"] | HIAAA</title>
+    <link href="~/css/output.css" rel="stylesheet">
+    <link rel="stylesheet" href="/node_modules/apexcharts/dist/apexcharts.css">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="drawer lg:drawer-open">
+    <input id="my-drawer-2" type="checkbox" class="drawer-toggle"/>
+    <div class="navbar justify-between p-6 bg-base-200 absolute z-10">
+        <label for="my-drawer-2">
+            <i data-lucide="menu"></i>
+        </label>
+        <partial name="_LoginPartial"/>
+    </div>
+    <div class="drawer-content mt-20 p-6">
+        <div class="breadcrumbs text-sm mb-8">
+            <ul class="text-gray-500">
+                <li>
+                    <i class="w-3.5" data-lucide="folder-closed"></i>
+                </li>
+                @if (SignInManager.IsSignedIn(User) && (User.IsInRole("APPADMIN") || User.IsInRole("ADMIN")) && ViewData["Breadcrumbs"] is List<(string label, string link)> breadcrumbss)
+                {
+                    foreach (var (label, link) in breadcrumbs)
+                    {
+                        if (label != "Index")
+                        {
+                            <li>
+                                @if (!string.IsNullOrEmpty(link))
+                                {
+                                    <a href="@link">@label</a>
+                                }
+                                else
+                                {
+                                    <span>@label</span>
+                                }
+                            </li>
+                        }
+                    }
+                }
+            </ul>
+            <div class="flex items-center justify-between">
+                <h1 class="text-4xl text-gray-300">
+                    @(ViewData["PageHeader"].ToString() != "Index" ? ViewData["PageHeader"] : ViewContext.RouteData.Values["controller"].ToString())
+                </h1>
+            </div>
+        </div>
+        @RenderBody()
+    </div>
+    <div class="drawer-side z-30">
+        <label for="my-drawer-2" aria-label="close sidebar" class="drawer-overlay"></label>
+        <ul class="menu p-0 bg-base-200 text-base-content min-h-full w-72 pr-4 flex flex-col justify-between">
+            <div>
+                <li class="focus:bg-transparent active:bg-transparent hover:bg-transparent">
+                    <a class="py-6 focus:bg-transparent active:bg-transparent hover:bg-transparent text-2xl no-animation">HIAAA</a>
+                </li>
+                <li>
+                    <a asp-action="Dashboard" asp-controller="Home" class="py-4 rounded-none rounded-r-lg">
+                        <i
+                            data-lucide="house">
+                        </i> Dashboard
+                    </a>
+                </li>
+                <li>
+                    <a asp-controller="App" asp-action="Index" class="py-4 rounded-none rounded-r-lg"><i data-lucide="app-window"></i> Applications</a>
+                </li>
+                <li>
+                    <a asp-action="Index" asp-controller="Roles" class="py-4 rounded-none rounded-r-lg"><i data-lucide="drama"></i> Roles</a>
+                </li>
+                <li>
+                    <a class="py-4 rounded-none rounded-r-lg"><i data-lucide="user-round"></i> Users</a>
+                </li>
+                <li>
+                    <a class="py-4 rounded-none rounded-r-lg"><i data-lucide="activity"></i> Monitoring</a>
+                </li>
+                <li>
+                    <a asp-action="Index" asp-controller="AppAdmins" class="py-4 rounded-none rounded-r-lg"><i data-lucide="user-round"></i> App Admins</a>
+                </li>
+            </div>
+            @if (SignInManager.IsSignedIn(User))
+            {
+                <div>
+                    <li>
+                        <a class="py-4 rounded-none rounded-r-lg"><i data-lucide="settings"></i> Settings</a>
+                    </li>
+                    <li>
+                        <form class="py-4 rounded-none rounded-r-lg" id="logoutForm" asp-area="Identity" asp-page="/Account/Logout"
+                              asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                            <i data-lucide="log-out"></i>
+                            <button class="text-left" id="logout" type="submit">Logout</button>
+                        </form>
+                    </li>
+                </div>
+            }
+        </ul>
+    </div>
+</div>
+
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/js/site.js" asp-append-version="true"></script>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+<script>
+    lucide.createIcons();
+</script>
+@await RenderSectionAsync("Scripts", required: false)
+@await Component.InvokeAsync("Notyf")
+<script src="/node_modules/preline/dist/preline.js"></script>
+<script src="/node_modules/lodash/lodash.min.js"></script>
+<script src="/node_modules/apexcharts/dist/apexcharts.min.js"></script>
+</body>
+</html>

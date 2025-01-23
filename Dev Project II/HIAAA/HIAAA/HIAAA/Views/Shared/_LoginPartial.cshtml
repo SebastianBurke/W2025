@@ -1,0 +1,64 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using HIAAA.Areas.Identity.Data
+@using HIAAA.DAL
+
+@inject SignInManager<HIAAAUser> SignInManager
+@inject UserManager<HIAAAUser> UserManager
+@inject IAppAdminRepository _appAdminRepo
+
+@{
+    var appAdmin = new User();
+    var username = "";
+    if (SignInManager.IsSignedIn(User))
+    {
+        username = UserManager.GetUserName(User);
+        if (!string.IsNullOrEmpty(username))
+        {
+            appAdmin = await _appAdminRepo.GetByUsername(username);
+        }
+    }
+}
+
+<ul class="navbar-nav">
+    @if (SignInManager.IsSignedIn(User))
+    {
+        <li>
+            <a id="manage" class="text-sm" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
+                <div class="flex-none">
+                    <div class="">
+                        <div class="flex items-center justify-center gap-2">
+                            <img class="w-10 h-10 rounded-full"
+                                 alt="User profile picture"
+                                 src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"/>
+                            <div>
+                                <p class="text-sm">@appAdmin?.Firstname @appAdmin?.Lastname</p>
+                                <p class="text-xs opacity-50">@username</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </li>
+        @if (SignInManager.IsSignedIn(User) && User.IsInRole("ADMIN"))
+        {
+            <li class="nav-item">
+                <a class="nav-link btn btn-link text-dark border-0" id="register" asp-area="Identity" asp-page="/Account/Register">
+                    Create App Admin
+                </a>
+            </li>
+        }
+
+        <li class="nav-item">
+            <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout"
+                  asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                <button id="logout" type="submit" class="nav-link btn btn-link text-dark border-0">Logout</button>
+            </form>
+        </li>
+    }
+    else
+    {
+        <li class="nav-item">
+            <a class="nav-link text-dark" id="login" asp-area="Identity" asp-page="/Account/Login">Login</a>
+        </li>
+    }
+</ul>
