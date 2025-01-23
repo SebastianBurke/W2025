@@ -1,0 +1,6 @@
+@HIAAAServices_HostAddress = http://localhost:5264
+
+GET {{HIAAAServices_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

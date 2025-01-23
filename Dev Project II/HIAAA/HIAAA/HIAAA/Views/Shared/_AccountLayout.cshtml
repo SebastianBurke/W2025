@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>@ViewData["Title"] | HIAAA</title>
+    <link href="/css/output.css" rel="stylesheet">
+    <link rel="stylesheet" href="/node_modules/apexcharts/dist/apexcharts.css">
+</head>
+<body>
+@RenderBody()
+
+<script src="/lib/jquery/dist/jquery.min.js"></script>
+<script src="/js/site.js" asp-append-version="true"></script>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+
+<script>
+    lucide.createIcons();
+</script>
+
+@await RenderSectionAsync("Scripts", required: false)
+@* @await Component.InvokeAsync("Notyf") *@
+
+<script src="/node_modules/preline/dist/preline.js"></script>
+<script src="/node_modules/lodash/lodash.min.js"></script>
+<script src="/node_modules/apexcharts/dist/apexcharts.min.js"></script>
+
+</body>
+</html>

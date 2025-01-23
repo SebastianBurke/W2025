@@ -1,0 +1,63 @@
+@model HIAAA.DTO.UpdateAppDTO
+
+@{
+    ViewBag.Title = "Update Application";
+    Layout = "_Layout";
+}
+
+<div class="flex justify-between items-center">
+    <h1 class="text-4xl px-3 text-gray-300">@ViewData["Title"]</h1>
+</div>
+
+
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-4">
+    <form method="post" asp-action="Update">
+        <!-- App ID -->
+        <input asp-for="AppId" class="hidden">
+        <input asp-for="CreatedBy" value="2" class="hidden">
+        <span asp-validation-for="CreatedBy" class="text-red-500"></span>
+        
+        <!-- App Type -->
+        <div class="form-control hidden">
+            <label class="label">
+                <span class="label-text">App Type</span>
+            </label>
+            <select asp-for="Apptype" asp-items="ViewBag.AppTypeOptions" class="select select-bordered">
+                <option value="" disabled selected>-- Select App Type --</option>
+            </select>
+            <span asp-validation-for="Apptype" class="text-red-500"></span>
+        </div>
+        <!-- App Code -->
+        <div class="form-control hidden">
+            <label class="label">
+                <span class="label-text">App Code</span>
+            </label>
+            <input asp-for="AppCode" class="input input-bordered"/>
+            <!-- Display the error message from ViewBag -->
+            <span asp-validation-for="AppCode" class="text-red-500"></span>
+        </div>
+
+        <!-- App Name -->
+        <div class="form-control">
+            <label class="label">
+                <span class="label-text">App Name</span>
+            </label>
+            <input asp-for="AppName" class="input input-bordered"/>
+            <span asp-validation-for="AppName" class="text-red-500"></span>
+        </div>
+
+        <!-- App Description -->
+        <div class="form-control">
+            <label class="label">
+                <span class="label-text">App Description</span>
+            </label>
+            <textarea asp-for="Appdescription" class="textarea textarea-bordered"></textarea>
+            <span asp-validation-for="Appdescription" class="text-red-500"></span>
+        </div>
+
+        <div class="flex flex-row gap-3">
+            <button type="submit" class="btn btn-primary mt-4">Update</button>
+            <a asp-action="Index" class="btn btn-neutral mt-4">Cancel</a>
+        </div>
+    </form>
+</div>

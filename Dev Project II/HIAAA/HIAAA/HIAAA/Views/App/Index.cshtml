@@ -1,0 +1,80 @@
+@model List<App>
+
+@{
+    ViewBag.Title = "Applications";
+    Layout = "_Layout";
+}
+
+<div class="flex justify-between items-center">
+    <h1 class="text-4xl p-3 mx-1 text-gray-300">@ViewData["Title"]</h1>
+    @if (User.Identity.IsAuthenticated && User.IsInRole("ADMIN"))
+    {
+        <a asp-action="Create" class="bg-base-200 text-white p-2 mx-4 shadow-md ">
+            <i data-lucide="plus"></i>
+        </a>
+    }
+</div>
+
+
+@if (Model == null || !Model.Any())
+{
+    <div class="flex flex-col items-center justify-center mt-20">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h11M9 21H3m6-11V3m0 8a2 2 0 11-4 0m0 0a2 2 0 104 0M21 6h-6m6 6h-6m6 6h-6" />
+        </svg>
+        <p class="text-gray-300 text-lg">There are no Applications in the system.</p>
+    </div>
+}
+else
+{
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-4">
+        @foreach (var app in Model)
+        {
+            <div class="text-white rounded-lg shadow-md p-4 bg-[#1a1e23]">
+                <!-- Icons container -->
+                <div class="flex items-center justify-between">
+                    <h2 class="truncate text-lg font-bold">@app.Appcode</h2>
+                    @if (User.Identity.IsAuthenticated && User.IsInRole("ADMIN"))
+                    {
+                        <div class="flex space-x-2 items-center">
+                            <a asp-action="Update" asp-route-id="@app.Appid">
+                                <i data-lucide="square-pen"></i>
+                            </a>
+                            <button onclick="confirmDelete('@app.Appid', '@app.Appcode')" class="text-error">
+                                <i data-lucide="trash-2"></i>
+                            </button>
+                        </div>
+                    }
+                </div>
+                <p class="mt-2 text-gray-300">@app.Appname</p>
+                <p class="mt-2 text-gray-300">@app.Appdescription</p>
+            </div>
+        }
+    </div>
+}
+<dialog id="deleteModal" class="modal">
+    <div class="modal-box">
+        <h3 class="font-bold text-lg">Confirm Deletion</h3>
+        <p class="py-4">Are you sure you want to delete app <span id="appToDelete"></span>?</p>
+        <div class="modal-action">
+            <form method="dialog">
+                <button class="btn">Cancel</button>
+            </form>
+            <form id="deleteForm" asp-action="Delete" asp-controller="App">
+                <input type="hidden" name="id" id="deleteAppId"/>
+                <button class="btn btn-error" type="submit">Delete</button>
+            </form>
+        </div>
+    </div>
+</dialog>
+
+<script>
+    function confirmDelete(appId, appName) {
+        document.getElementById('appToDelete').textContent = appName;
+        document.getElementById('deleteAppId').value = appId;
+        document.getElementById('deleteModal').showModal();
+    }
+</script>
+
+
+

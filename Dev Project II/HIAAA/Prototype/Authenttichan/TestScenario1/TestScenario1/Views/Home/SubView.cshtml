@@ -1,0 +1,24 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+@model IEnumerable<TestScenario1.Models.UserRole>;
+
+@if (Model.ElementAt(0).RoleId == 2)
+{
+    <h1>Sub-Admin Page</h1>
+    <div>You are a Sub-Admin, Only Sub Admins can see this Page</div>
+} else if (Model.ElementAt(0).RoleId == 4) {
+    <h1>Member Page</h1>
+    <div>Member Page, Only Members can view this page</div>
+} else if (Model.ElementAt(0).RoleId == 1) {
+    <h1>Overall Admin Page</h1>
+    <div>Overall Admin Page, Only the overall admins can view this page</div>
+}
+else
+{
+    <h1>Guest Page</h1>
+    <div>Guest Page, Only Guest can view this page</div>
+}

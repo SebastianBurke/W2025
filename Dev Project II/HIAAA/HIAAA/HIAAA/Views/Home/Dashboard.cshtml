@@ -1,0 +1,542 @@
+﻿@{
+    ViewData["Title"] = "Dashboard";
+}
+<div class="w-full flex-col flex items-stretch justify-stretch md:flex-row gap-4">
+  <!-- Left Column -->
+  <div class="flex flex-col gap-4">
+    <!-- Stats Header Section -->
+    <div class="grid grid-cols-3 gap-4">
+      <div class="bg-base-200 rounded text-white">
+        <div class="p-4">
+          <div class="text-gray-400 text-sm">Apps Active</div>
+          <div class="text-4xl font-bold">100</div>
+        </div>
+      </div>
+      <div class="bg-base-200 rounded text-white">
+        <div class="p-4">
+          <div class="text-gray-400 text-sm">Usable Roles</div>
+          <div class="text-4xl font-bold">25</div>
+        </div>
+      </div>
+      <div class="bg-base-200 rounded text-white">
+        <div class="p-4">
+          <div class="text-gray-400 text-sm">Users</div>
+          <div class="text-4xl font-bold">10,000</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Doughnut Chart Section -->
+    <div class="bg-base-200 rounded p-6 w-full h-full">
+      <div class="flex justify-between items-center gap-x-4">
+        <div class="text-white">Top 7 Applications per Active Users (last 7 days)</div>
+      </div>
+      <div class="flex flex-row justify-between items-start mt-5">
+        <!-- Legend Indicators -->
+        <div class="flex flex-col items-start mt-3">
+          <div class="inline-flex items-center">
+            <span class="w-2.5 h-2.5 inline-block bg-blue-600 rounded-sm mr-2"></span>
+            <span class="text-[13px] text-gray-600 dark:text-neutral-400">HFA</span>
+          </div>
+          <div class="inline-flex items-center">
+            <span class="w-2.5 h-2.5 inline-block bg-cyan-500 rounded-sm mr-2"></span>
+            <span class="text-[13px] text-gray-600 dark:text-neutral-400">NST</span>
+          </div>
+          <!-- Add more legend items as needed -->
+        </div>
+        <!-- Doughnut Chart Placeholder -->
+        <div class="overflow-visible" id="hs-doughnut-chart"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right Column for Charts -->
+  <div class="w-full flex flex-col gap-4 md:w-1/2">
+    <!-- Total Authentication Requests Chart -->
+    <div class="bg-base-200 rounded p-4 h-1/2">
+      <div class="flex justify-between items-center">
+        <div class="text-white">Total Authentication Requests (last 7 days)</div>
+      </div>
+      <div id="hs-curved-area-charts"></div>
+    </div>
+
+    <!-- Average Authentication Time Chart -->
+    <div class="bg-base-200 rounded p-4 h-1/2">
+      <div class="flex justify-between items-center">
+        <div class="text-white">Average Authentication Time (last 7 days)</div>
+      </div>
+      <div id="hs-curved-area-charts2"></div>
+    </div>
+  </div>
+</div>
+
+
+<style>
+  .apexcharts-tooltip-no-bg {
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+
+  .apexcharts-tooltip {
+    border: none !important;
+    background-color: #191e24;
+  }
+  
+  .tooltip-bg-color {
+    background-color: #191e24 !important;
+  }
+</style>
+<script src="https://preline.co/assets/js/hs-apexcharts-helpers.js"></script>
+<script>
+  window.addEventListener('load', () => {
+    // Apex Line Chart
+    (function () {
+      buildChart('#hs-curved-area-charts', (mode) => ({
+        chart: {
+          height: 200,
+          type: 'area',
+          toolbar: {
+            show: false
+          },
+          zoom: {
+            enabled: false
+          }
+        },
+        series: [
+          {
+            name: 'Nb Requests',
+            data: [123, 200, 31, 72, 185, 115]
+          }
+        ],
+        legend: {
+          show: false
+        },
+        dataLabels: {
+          enabled: false
+        },
+        stroke: {
+          curve: 'smooth',
+          width: 2
+        },
+        grid: {
+          strokeDashArray: 2
+        },
+        fill: {
+          type: 'gradient',
+          gradient: {
+            type: 'vertical',
+            shadeIntensity: 1,
+            opacityFrom: 0.1,
+            opacityTo: 0.8
+          }
+        },
+        xaxis: {
+          type: 'int',
+          tickAmount: 6,
+          categories: [1, 2, 3, 4, 5, 6],
+          axisBorder: {
+            show: false
+          },
+          axisTicks: {
+            show: false
+          },
+          tooltip: {
+            enabled: false
+          },
+          labels: {
+            style: {
+              colors: '#9ca3af',
+              fontSize: '13px',
+              fontFamily: 'Inter, sans-serif',
+              fontWeight: 400
+            }
+          }
+        },
+        yaxis: {
+          min: 0,
+          max: 200,
+          tickAmount: 4,
+          labels: {
+            align: 'left',
+            style: {
+              colors: '#9ca3af',
+              fontSize: '13px',
+              fontFamily: 'Inter, sans-serif',
+              fontWeight: 400
+            }
+          }
+        },
+        tooltip: {
+          enabled: true,
+          custom: function (props) {
+            // Format the value before passing to buildTooltip
+            const value = props.series[props.seriesIndex][props.dataPointIndex];
+            return buildTooltip(props, {
+              title: `Day ${props.dataPointIndex + 1}`,
+              titleExtClasses: "tooltip-bg-color",
+              mode,
+              hasTextLabel: true,
+              wrapperExtClasses: 'min-w-28 tooltip-bg-color',
+              labelDivider: ':',
+              labelExtClasses: 'ms-2 tooltip-bg-color',
+              valueFormatter: (val) => val.toString() // Add this to control value formatting
+            });
+          },
+          style: {
+            fontSize: '12px',
+            fontFamily: 'Inter, sans-serif'
+          },
+          marker: {
+            show: true,
+          },
+          fixed: {
+            enabled: false,
+          },
+          cssClass: 'apexcharts-tooltip-no-bg',
+        },
+        responsive: [{
+          breakpoint: 568,
+          options: {
+            chart: {
+              height: 300
+            },
+            labels: {
+              style: {
+                colors: '#9ca3af',
+                fontSize: '11px',
+                fontFamily: 'Inter, sans-serif',
+                fontWeight: 400
+              }
+            },
+            yaxis: {
+              labels: {
+                style: {
+                  colors: '#9ca3af',
+                  fontSize: '11px',
+                  fontFamily: 'Inter, sans-serif',
+                  fontWeight: 400
+                }
+              }
+            }
+          }
+        }]
+      }), {
+        colors: ['#2563eb', '#9333ea'],
+        fill: {
+          gradient: {
+            opacityFrom: 0.45,
+            opacityTo: 0,
+            stops: [0, 100]
+          }
+        },
+        grid: {
+          borderColor: '#e5e7eb'
+        }
+      }, {
+        colors: ['#3b82f6', '#a855f7'],
+        fill: {
+          gradient: {
+            opacityFrom: 0.45,
+            opacityTo: 0,
+            stops: [0, 100]
+          }
+        },
+        grid: {
+          borderColor: '#404040'
+        }
+      });
+    })();
+  });
+</script>
+<script>
+  function buildTooltip(props, options) {
+    const {
+      title,
+      mode,
+      valuePrefix = '',
+      isValueDivided = true,
+      valuePostfix = '',
+      hasTextLabel = false,
+      invertGroup = false,
+      labelDivider = '',
+      wrapperClasses = 'ms-0.5 mb-2 bg-white border border-gray-200 text-gray-800 rounded-lg shadow-md dark:bg-neutral-800 dark:border-neutral-700',
+      wrapperExtClasses = '',
+      seriesClasses = 'text-[12px]',
+      seriesExtClasses = '',
+      titleClasses = 'font-semibold !text-sm !bg-white !border-gray-200 text-gray-800 rounded-t-lg dark:!bg-neutral-800 dark:!border-neutral-700 dark:text-neutral-200',
+      titleExtClasses = '',
+      markerClasses = '!w-2.5 !h-2.5 !me-1.5',
+      markerExtClasses = '!rounded-sm',
+      valueClasses = '!font-medium text-gray-500 !ms-auto dark:text-neutral-400',
+      valueExtClasses = '',
+      labelClasses = 'text-gray-500 dark:text-neutral-400',
+      labelExtClasses = ''
+    } = options;
+    const { dataPointIndex } = props;
+    const { colors } = props.ctx.opts;
+    const series = props.ctx.opts.series;
+    let seriesGroups = '';
+
+    series.forEach((single, i) => {
+      const val = props.series[i][dataPointIndex] || (typeof series[i].data[dataPointIndex] !== 'object' ? series[i].data[dataPointIndex] : props.series[i][dataPointIndex]);
+      const label = series[i].name;
+      const groupData = invertGroup ? {
+        left: `${hasTextLabel ? label : ''}${labelDivider}`,
+        right: `${valuePrefix}${val >= 1000 && isValueDivided ? `${val / 1000}k` : val}${valuePostfix}`
+      } : {
+        left: `${valuePrefix}${val >= 1000 && isValueDivided ? `${val / 1000}k` : val}${valuePostfix}`,
+        right: `${hasTextLabel ? label : ''}${labelDivider}`
+      }
+      const labelMarkup = `<span class="apexcharts-tooltip-text-y-label ${labelClasses} ${labelExtClasses}">${groupData.left}</span>`;
+
+      seriesGroups += `<div class="apexcharts-tooltip-series-group !flex ${hasTextLabel ? '!justify-between' : ''} order-${i + 1} ${seriesClasses} ${seriesExtClasses}">
+      <span class="flex items-center">
+        <span class="apexcharts-tooltip-marker ${markerClasses} ${markerExtClasses}" style="background: ${colors[i]}"></span>
+        <div class="apexcharts-tooltip-text">
+          <div class="apexcharts-tooltip-y-group !py-0.5">
+            <span class="apexcharts-tooltip-text-y-value ${valueClasses} ${valueExtClasses}">${groupData.right}</span>
+          </div>
+        </div>
+      </span>
+      ${labelMarkup}
+    </div>`
+    });
+
+    return `<div class="${mode === 'dark' ? 'dark ' : ''}${wrapperClasses} ${wrapperExtClasses}">
+    <div class="apexcharts-tooltip-title ${titleClasses} ${titleExtClasses}">${title}</div>
+    ${seriesGroups}
+  </div>`;
+  }
+
+  window.addEventListener('load', () => {
+    // Apex Line Chart
+    (function () {
+      buildChart('#hs-curved-area-charts2', (mode) => ({
+        chart: {
+          height: 200,
+          type: 'area',
+          toolbar: {
+            show: false
+          },
+          zoom: {
+            enabled: false
+          }
+        },
+        series: [
+          {
+            name: 'Milliseconds',
+            data: [200, 125, 100, 85, 92, 115]
+          }
+        ],
+        legend: {
+          show: false
+        },
+        dataLabels: {
+          enabled: false
+        },
+        stroke: {
+          curve: 'smooth',
+          width: 2
+        },
+        grid: {
+          strokeDashArray: 2
+        },
+        fill: {
+          type: 'gradient',
+          gradient: {
+            type: 'vertical',
+            shadeIntensity: 1,
+            opacityFrom: 0.1,
+            opacityTo: 0.8
+          }
+        },
+        xaxis: {
+          type: 'int',
+          tickAmount: 6,
+          categories: [1, 2, 3, 4, 5, 6],
+          axisBorder: {
+            show: false
+          },
+          axisTicks: {
+            show: false
+          },
+          tooltip: {
+            enabled: false
+          },
+          labels: {
+            style: {
+              colors: '#9ca3af',
+              fontSize: '13px',
+              fontFamily: 'Inter, sans-serif',
+              fontWeight: 400,
+            },
+            cssClasses: "tooltip-bg-color"
+          }
+        },
+        yaxis: {
+          min: 0,
+          max: 200,
+          tickAmount: 4,
+          labels: {
+            align: 'left',
+            style: {
+              colors: '#9ca3af',
+              fontSize: '13px',
+              fontFamily: 'Inter, sans-serif',
+              fontWeight: 400
+            }
+          },
+          formatter: (value) => value.toString()
+        },
+        tooltip: {
+          enabled: true,
+          custom: function (props) {
+            // Format the value before passing to buildTooltip
+            const value = props.series[props.seriesIndex][props.dataPointIndex];
+            return buildTooltip(props, {
+              title: `Day ${props.dataPointIndex + 1}`,
+              titleExtClasses: "tooltip-bg-color",
+              mode,
+              hasTextLabel: true,
+              wrapperExtClasses: 'min-w-28 tooltip-bg-color',
+              labelDivider: ':',
+              labelExtClasses: 'ms-2 tooltip-bg-color',
+              valueFormatter: (val) => val.toString() // Add this to control value formatting
+            });
+          },
+          style: {
+            fontSize: '12px',
+            fontFamily: 'Inter, sans-serif'
+          },
+          marker: {
+            show: true,
+          },
+          fixed: {
+            enabled: false,
+          },
+          cssClass: 'apexcharts-tooltip-no-bg',
+        },
+        responsive: [{
+          breakpoint: 568,
+          options: {
+            chart: {
+              height: 300
+            },
+            labels: {
+              style: {
+                colors: '#9ca3af',
+                fontSize: '11px',
+                fontFamily: 'Inter, sans-serif',
+                fontWeight: 400,
+              }
+            },
+            yaxis: {
+              labels: {
+                style: {
+                  colors: '#9ca3af',
+                  fontSize: '11px',
+                  fontFamily: 'Inter, sans-serif',
+                  fontWeight: 400
+                }
+              }
+            }
+          }
+        }]
+      }), {
+        colors: ['#FD6510'],
+        fill: {
+          gradient: {
+            opacityFrom: 0.45,
+            opacityTo: 0,
+            stops: [0, 100]
+          }
+        },
+        grid: {
+          borderColor: '#e5e7eb'
+        }
+      }, {
+        fill: {
+          gradient: {
+            opacityFrom: 0.45,
+            opacityTo: 0,
+            stops: [0, 100]
+          }
+        },
+        grid: {
+          borderColor: '#404040'
+        }
+      });
+    })();
+  });
+
+
+</script>
+<script>
+  window.addEventListener('load', () => {
+    // Apex Doughnut Chart
+    (function () {
+      buildChart('#hs-doughnut-chart', (mode) => ({
+        chart: {
+          height: 350,
+          width: 350,
+          type: 'donut',
+          zoom: {
+            enabled: false
+          }
+        },
+        plotOptions: {
+          pie: {
+            donut: {
+              size: '60%'
+            }
+          }
+        },
+        series: [47, 23, 30],
+        labels: ['Tailwind CSS', 'Preline UI', 'Others'],
+        legend: {
+          show: false
+        },
+        dataLabels: {
+          enabled: false
+        },
+        stroke: {
+          width: 0
+        },
+        grid: {
+          padding: {
+            top: 0,
+            bottom: 0,
+            left: 0,
+            right: 0
+          }
+        },
+        states: {
+          hover: {
+            filter: {
+              type: 'none'
+            }
+          }
+        },
+        tooltip: {
+          enabled: true,
+          custom: function (props) {
+            return buildTooltipForDonut(
+              props,
+              mode === 'dark' ? ['#fff', '#fff', '#000'] : ['#fff', '#fff', '#000']
+            );
+          }
+        }
+      }), {
+        colors: ['#3b82f6', '#22d3ee', '#e5e7eb'],
+        stroke: {
+          colors: ['rgb(255, 255, 255)']
+        }
+      }, {
+        colors: ['#3b82f6', '#22d3ee', '#404040'],
+        stroke: {
+          colors: ['rgb(38, 38, 38)']
+        }
+      });
+    })();
+  });
+</script>

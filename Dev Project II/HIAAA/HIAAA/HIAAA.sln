@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35222.181
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HIAAA", "HIAAA\HIAAA.csproj", "{F7D6FFFC-8D54-49C9-92FA-00194F353740}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HIAAAServices", "HIAAAServices\HIAAAServices.csproj", "{D95BDE23-5868-413C-B3DD-6CD2E39579DD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HIAAATests", "HIAAATests\HIAAATests.csproj", "{86CE292B-734A-4B0C-B515-CEEA8A01F121}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F7D6FFFC-8D54-49C9-92FA-00194F353740}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F7D6FFFC-8D54-49C9-92FA-00194F353740}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F7D6FFFC-8D54-49C9-92FA-00194F353740}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F7D6FFFC-8D54-49C9-92FA-00194F353740}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D95BDE23-5868-413C-B3DD-6CD2E39579DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D95BDE23-5868-413C-B3DD-6CD2E39579DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D95BDE23-5868-413C-B3DD-6CD2E39579DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D95BDE23-5868-413C-B3DD-6CD2E39579DD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{86CE292B-734A-4B0C-B515-CEEA8A01F121}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{86CE292B-734A-4B0C-B515-CEEA8A01F121}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{86CE292B-734A-4B0C-B515-CEEA8A01F121}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{86CE292B-734A-4B0C-B515-CEEA8A01F121}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

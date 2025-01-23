@@ -1,0 +1,19 @@
+﻿@model IEnumerable<HIAAA.Models.User>
+@{
+ViewData["Title"] = "App Admins";
+}
+
+<p>@TempData["Success"]</p>
+<a class="nav-link btn-link text-dark border-0" id="register" asp-area="Identity" asp-page="/Account/Register">
+    Create App Admin
+</a>
+@foreach (var appAdmin in Model)
+{
+    <div class="mb-2">
+        <p><b>Name:</b> @appAdmin.Firstname @appAdmin.Lastname</p>
+        <p><b>Username:</b> @appAdmin.Username</p>
+        <a asp-action="Edit" asp-controller="AppAdmins" asp-route-id="@appAdmin.Userid" class="text-blue-500 underline">Edit</a>
+        <a asp-action="Delete" asp-controller="AppAdmins" asp-route-id="@appAdmin.Userid" class="text-red-600 underline">Delete</a>
+    </div>
+    
+}
