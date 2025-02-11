@@ -1,0 +1,17 @@
+Requirement ID,Requirement/Deliverable,Status,Comments/Concerns/Risks,Deliver By,Effort Estimate (Hours)
+3.1,User Documentation,In Progress,Needs review from business user.,Week 7,15
+3.2,Operational Documentation,New,Operational team input required.,Week 8,10
+3.3,Design Documentation,New,Requires architecture and ERD diagrams.,Week 8,12
+4.1,Database Design and Implementation,In Progress,Schema review pending approval.,Week 7,14
+4.2,Database Security and External References,In Progress,Need to validate security practices.,Week 7,10
+4.3,Privacy Audit,Not Started,Uncertain access controls.,Week 9,8
+4.4,Best Practices Audit,Not Started,Coding standards need verification.,Week 9,8
+4.5,Database Deployment,In Progress,Deployment process not finalized.,Week 6,10
+4.6,Database Versioning,In Progress,Version tracking mechanism needed.,Week 6,12
+5.1,Application Code Design and Implementation,In Progress,Code review pending team approval.,Week 7,15
+5.2,Application Code Versioning,New,Versioning scheme unclear.,Week 8,10
+5.3,Frameworks and Packaging,New,Dependency tracking not completed.,Week 8,12
+5.4,Application Code Deployment,New,Deployment script documentation missing.,Week 8,14
+6.1,System Testing,Not Started,Test plan not drafted.,Week 9,18
+6.2,Feature Testing,Not Started,Acceptance criteria need refinement.,Week 9,20
+6.3,Unit Testing,Not Started,Low unit test coverage.,Week 9,22
