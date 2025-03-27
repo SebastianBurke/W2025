@@ -1,6 +1,5 @@
 use("scanalesburke_db")
 db.cars.updateOne(
-  {}, 
+  { year: 1984}, 
   { $unset: { vin: "" } },
-  { sort: { Year: 1 }, skip: 2, limit: 1 }
 );
