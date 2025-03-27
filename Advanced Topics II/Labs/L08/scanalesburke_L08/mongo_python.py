@@ -21,7 +21,7 @@ try:
             pprint(doc)
 
     def update_employee(collection, last_name):
-        print(f"\n💰 Updating salary for '{last_name}' by $20,000:")
+        print(f"\n Updating salary for '{last_name}' by $20,000:")
 
         existing_employee = collection.find_one({ "name.last_name": last_name })
         
@@ -42,8 +42,8 @@ try:
         else:
             print(f"⚠️ Employee with last name '{last_name}' not found.")
 
-    find_z(cars_collection)
-    list_employees(employees_collection)
+    # find_z(cars_collection)
+    # list_employees(employees_collection)
     update_employee(employees_collection, "Maine")
 
 except Exception as e:
