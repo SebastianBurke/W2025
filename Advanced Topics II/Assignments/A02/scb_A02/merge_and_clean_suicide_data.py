@@ -1,11 +1,9 @@
 import pandas as pd
 import os
 
-# Input and output
 input_file = "Death_rates_for_suicide__by_sex__race__Hispanic_origin__and_age__United_States.csv"
 output_file = "cleaned_suicide_data.csv"
 
-# Read raw CSV
 df_raw = pd.read_csv(input_file)
 
 # Drop irrelevant columns
@@ -51,20 +49,16 @@ def parse_components(group_desc):
         elif any(k in p.lower() for k in age_keywords):
             age = p
         else:
-            # If none matched and race still empty, assume it's race (catch edge cases)
             if not race:
                 race = p
 
     return pd.Series([sex, race, ethnicity, age])
 
-# Apply parsing
 df[["Sex", "Race", "Ethnicity", "DetailedAgeGroup"]] = df["GroupDescription"].apply(parse_components)
 
-# Final clean dataset
 df_final = df[[
     "YEAR", "Sex", "Race", "Ethnicity", "AgeGroup", "SuicideRate"
 ]].copy()
 
-# Save cleaned output
 df_final.to_csv(output_file, index=False)
 print(f"✅ Cleaned and fixed data saved to: {output_file}")
